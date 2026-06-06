@@ -12,7 +12,6 @@
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ── BODY ── */
 body {
   font-family: 'Noto Sans Thai', sans-serif;
   background: var(--g-deep);
@@ -28,7 +27,6 @@ body::before {
     radial-gradient(ellipse 50% 70% at 85% 85%, #4caf5012 0%, transparent 55%);
 }
 
-/* ── HEADER ── */
 .header {
   text-align: center; margin-bottom: 2rem; width: 100%; max-width: 520px;
   animation: fadeDown 0.6s ease both;
@@ -48,7 +46,6 @@ body::before {
 .header h1 em { color: var(--g-bright); font-style: normal; }
 .header p { font-size: 0.88rem; color: #7da882; }
 
-/* ── CARD ── */
 .card {
   background: var(--cream); border-radius: 20px; width: 100%; max-width: 520px;
   box-shadow: 0 32px 64px #00000055, 0 0 0 1px #4caf5018;
@@ -56,7 +53,6 @@ body::before {
   animation: fadeUp 0.6s 0.1s ease both;
 }
 
-/* ── STEP BAR ── */
 .stepbar {
   display: flex; align-items: stretch;
   border-bottom: 1px solid var(--border);
@@ -91,11 +87,9 @@ body::before {
 }
 .stepbar-item.active .sb-label { color: var(--g-deep); font-weight: 700; }
 
-/* ── PANEL ── */
 .panel { display: none; padding: 1.75rem; }
 .panel.active { display: block; animation: fadeUp 0.35s ease both; }
 
-/* ── UPLOAD ZONE ── */
 .upload-zone {
   border: 2px dashed var(--g-light); border-radius: 14px;
   padding: 2rem 1.25rem; text-align: center; background: var(--g-bg);
@@ -113,7 +107,6 @@ body::before {
 .uz-title { font-size: 0.95rem; font-weight: 600; color: var(--g-deep); margin-bottom: 0.15rem; }
 .uz-sub   { font-size: 0.78rem; color: var(--muted); }
 
-/* ── IMAGE FRAME ── */
 .img-frame {
   width: 100%; background: #f0f0eb;
   border-radius: 12px; overflow: hidden;
@@ -128,7 +121,6 @@ body::before {
   display: block; object-fit: contain;
 }
 
-/* ── IMAGE META ── */
 .img-meta {
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 1.25rem;
@@ -145,7 +137,6 @@ body::before {
 }
 .btn-sm:hover { background: var(--g-bg); border-color: var(--g-mid); }
 
-/* ── INFO BOX ── */
 .info-box {
   display: flex; gap: 0.65rem; align-items: flex-start;
   background: var(--g-pale); border: 1px solid #c3e6c5;
@@ -155,7 +146,6 @@ body::before {
 .info-text  { font-size: 0.83rem; color: #2e5230; line-height: 1.55; }
 .info-text strong { font-weight: 600; display: block; margin-bottom: 0.1rem; }
 
-/* ── RESULT ── */
 .result-wrap {
   display: flex; gap: 1rem; align-items: flex-start;
   margin-bottom: 1.25rem;
@@ -189,7 +179,6 @@ body::before {
 .result-pred.found { color: #1a237e; }
 .result-conf { font-size: 0.78rem; color: var(--muted); font-family: 'Space Mono', monospace; }
 
-/* ── ALERT BOX ── */
 .alert-box {
   border-radius: 12px; padding: 1rem 1.1rem;
   margin-bottom: 1.1rem; border-left: 3px solid;
@@ -218,7 +207,6 @@ body::before {
   font-size: 0.62rem; font-weight: 700; margin-top: 2px;
 }
 
-/* ── BUTTONS ── */
 .btn {
   width: 100%; padding: 0.85rem; border-radius: 12px; font-size: 0.93rem;
   font-family: 'Noto Sans Thai', sans-serif; font-weight: 600;
@@ -239,7 +227,6 @@ body::before {
 .btn-row .btn-outline { flex: 1; }
 .btn-row .btn-primary { flex: 2; }
 
-/* ── SPINNER ── */
 .spinner {
   display: inline-block; width: 16px; height: 16px;
   border: 2px solid #ffffff40; border-top-color: #fff;
@@ -247,7 +234,6 @@ body::before {
   vertical-align: middle; margin-right: 0.4rem;
 }
 
-/* ── DIVIDER + CLASSES ── */
 .divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 1.75rem 0; }
 .classes-section { padding: 1.25rem 1.75rem 1.5rem; }
 .section-label {
@@ -262,7 +248,6 @@ body::before {
 }
 .cls-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-/* ── FOOTER ── */
 .footer {
   text-align: center; margin-top: 1.25rem;
   animation: fadeUp 0.6s 0.25s ease both; opacity: 0; animation-fill-mode: forwards;
@@ -280,7 +265,6 @@ body::before {
   font-size: 0.65rem; color: #3a5a3d; letter-spacing: 0.04em;
 }
 
-/* ── ANIMATIONS ── */
 @keyframes spin     { to { transform: rotate(360deg); } }
 @keyframes fadeUp   { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }

@@ -1,6 +1,5 @@
 const hasPrediction = window.KALESCAN_HAS_PREDICTION !== "";
 
-/* ── Step bar ── */
 function setStep(n) {
   [1, 2, 3].forEach(i => {
     document.getElementById('si' + i).className =
@@ -24,11 +23,9 @@ if (hasPrediction) {
   showPanel('panel-result');
 }
 
-/* ── State ── */
 let selFile = null;
 let selUrl  = null;
 
-/* ── Element refs ── */
 const fileInput    = document.getElementById('file-input');
 const dropZone     = document.getElementById('drop-zone');
 const inlinePrev   = document.getElementById('inline-preview');
@@ -45,7 +42,6 @@ const hiddenInput  = document.getElementById('hidden-file-input');
 const imgDataInput = document.getElementById('image-data-input');
 const btnAnalyze   = document.getElementById('btn-analyze');
 
-/* ── File loader ── */
 function loadFile(file) {
   if (!file || !file.type.startsWith('image/')) return;
   selFile = file;
@@ -70,7 +66,6 @@ function resetStep1() {
   btnToConfirm.disabled    = true;
 }
 
-/* ── Events ── */
 fileInput.addEventListener('change', function () { loadFile(this.files[0]); });
 
 dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('over'); });
@@ -104,7 +99,6 @@ uploadForm.addEventListener('submit', function (e) {
   setStep(3);
 });
 
-/* ── Global restart ── */
 function restartFlow() {
   resetStep1();
   setStep(1);

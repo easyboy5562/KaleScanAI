@@ -31,11 +31,9 @@ def index():
             try:
                 raw = file.read()
 
-                # ── encode รูปเพื่อส่งกลับไปแสดงผล ──
                 mime = file.mimetype or "image/jpeg"
                 image_data = f"data:{mime};base64,{base64.b64encode(raw).decode()}"
 
-                # ── predict ──
                 npimg = np.frombuffer(raw, np.uint8)
                 img   = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
 
