@@ -1,4 +1,0 @@
-0 Downy mildew
-1 insect
-2 Not found
-3 normal
