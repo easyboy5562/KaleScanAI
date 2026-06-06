@@ -1,6 +1,4 @@
-/* ── KaleScan · UI Logic ── */
-
-const hasPrediction = window.KALESCAN_HAS_PREDICTION === true;
+const hasPrediction = window.KALESCAN_HAS_PREDICTION !== "";
 
 /* ── Step bar ── */
 function setStep(n) {
