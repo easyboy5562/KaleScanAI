@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KaleScan - AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-deep: #1a3a1f;
+      --green-mid: #2d6a35;
+      --green-bright: #4caf50;
+      --green-light: #a8d5ab;
+      --cream: #f5f0e8;
+      --gold: #c9a84c;
+      --text-dark: #1a1a1a;
+      --text-muted: #6b7c6e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans Thai', sans-serif;
+      background: var(--green-deep);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, #2d6a3530 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 80%, #4caf5015 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .leaf-bg {
+      position: fixed;
+      opacity: 0.04;
+      font-size: 20rem;
+      pointer-events: none;
+      user-select: none;
+    }
+    .leaf-bg.tl { top: -4rem; left: -4rem; transform: rotate(-30deg); }
+    .leaf-bg.br { bottom: -4rem; right: -4rem; transform: rotate(150deg); }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    .header .badge {
+      display: inline-block;
+      background: var(--green-mid);
+      color: var(--green-light);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+      border: 1px solid #4caf5040;
+    }
+
+    .header h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .header h1 span {
+      color: var(--green-bright);
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      color: #8aad8d;
+    }
+
+    .card {
+      background: var(--cream);
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow:
+        0 40px 80px #00000060,
+        0 0 0 1px #4caf5020;
+      animation: fadeUp 0.7s 0.15s ease both;
+    }
+
+    .upload-zone {
+      border: 2px dashed var(--green-light);
+      border-radius: 16px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      background: #f0f7f0;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--green-mid);
+      background: #e6f3e7;
+      transform: translateY(-2px);
+    }
+
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .upload-zone h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--green-deep);
+      margin-bottom: 0.25rem;
+    }
+
+    .upload-zone p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    #preview-container {
+      display: none;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    #preview-container img {
+      max-height: 260px;
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px #00000020;
+      object-fit: cover;
+    }
+
+    #file-name {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .btn-predict {
+      width: 100%;
+      padding: 1rem;
+      background: var(--green-deep);
+      color: var(--cream);
+      border: none;
+      border-radius: 14px;
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-predict::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #4caf5020, transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .btn-predict:hover {
+      background: var(--green-mid);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px #1a3a1f60;
+    }
+    .btn-predict:hover::after { opacity: 1; }
+
+    .btn-predict:active { transform: translateY(0); }
+
+    .btn-predict:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .result-box {
+      margin-top: 1.5rem;
+      padding: 1.25rem 1.5rem;
+      border-radius: 14px;
+      border-left: 4px solid var(--green-bright);
+      background: #e8f5e9;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .result-box .label {
+      font-size: 0.75rem;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .result-box .prediction {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--green-deep);
+    }
+
+    .result-box.warning {
+      border-color: #e07b39;
+      background: #fff3ec;
+    }
+    .result-box.warning .prediction { color: #c05a1f; }
+
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+    }
+
+    .class-badge {
+      background: #f0f7f0;
+      border: 1px solid #c8e6c9;
+      border-radius: 10px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      color: var(--green-deep);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .class-badge .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green-bright);
+      flex-shrink: 0;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #d4e8d4;
+      margin: 1.5rem 0;
+    }
+
+    .section-title {
+      font-size: 0.8rem;
+      font-family: 'Space Mono', monospace;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid #ffffff40;
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 0.5rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: #4a6b4d;
+      animation: fadeUp 0.7s 0.3s ease both;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+  </style>
+</head>
+<body>
+  <span class="leaf-bg tl">🌿</span>
+  <span class="leaf-bg br">🌿</span>
+
+  <div class="container">
+    <div class="header">
+      <div class="badge">AI PLANT HEALTH · v1.0</div>
+      <h1>ตรวจโรค<span>ผักคะน้า</span></h1>
+      <p>อัปโหลดภาพใบผักเพื่อวิเคราะห์ด้วย AI</p>
+    </div>
+
+    <div class="card">
+      <form method="POST" enctype="multipart/form-data" id="upload-form">
+
+        <div class="upload-zone" id="drop-zone">
+          <input type="file" name="file" id="file-input" accept="image/*" required />
+          <span class="upload-icon">📸</span>
+          <h3>เลือกภาพหรือลากมาวางที่นี่</h3>
+          <p>รองรับ JPG, PNG, WEBP</p>
+        </div>
+
+        <div id="preview-container">
+          <img id="preview-img" src="" alt="preview"/>
+          <div id="file-name"></div>
+        </div>
+
+        <button type="submit" class="btn-predict" id="submit-btn">
+          🔍 วิเคราะห์โรคพืช
+        </button>
+      </form>
+      {% if prediction %}
+      <div class="result-box {% if prediction != 'healthy' and 'healthy' not in prediction.lower() %}warning{% endif %}">
+        <div class="label">ผลการวิเคราะห์</div>
+        <div class="prediction">
+          {% if 'healthy' in prediction.lower() %}✅{% else %}⚠️{% endif %}
+          {{ prediction }}
+        </div>
+      </div>
+      {% endif %}
+
+      <hr class="divider"/>
+
+      <div class="section-title">คลาสที่รู้จัก</div>
+      <div class="classes-grid">
+        <div class="class-badge"><span class="dot" style="background:#4caf50"></span>Normal (ปกติ)</div>
+        <div class="class-badge"><span class="dot" style="background:#64b5f6"></span>Not found (ไม่พบ)</div>
+        <div class="class-badge"><span class="dot" style="background:#ffa726"></span>Insect (แมลง)</div>
+        <div class="class-badge"><span class="dot" style="background:#ff5252"></span>Downy Mildew (ราน้ำค้าง)</div>
+      </div>
+    </div>
+
+    <div class="footer">Powered by TensorFlow / · Korawut</div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('file-input');
+    const previewContainer = document.getElementById('preview-container');
+    const previewImg = document.getElementById('preview-img');
+    const fileNameEl = document.getElementById('file-name');
+    const dropZone = document.getElementById('drop-zone');
+    const form = document.getElementById('upload-form');
+    const submitBtn = document.getElementById('submit-btn');
+
+    fileInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      showPreview(file);
+    });
+
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+        showPreview(file);
+      }
+    });
+
+    function showPreview(file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        previewImg.src = e.target.result;
+        previewContainer.style.display = 'block';
+        dropZone.style.display = 'none';
+        fileNameEl.textContent = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    form.addEventListener('submit', () => {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span>กำลังวิเคราะห์...';
+    });
+  </script>
+</body>
+</html>
